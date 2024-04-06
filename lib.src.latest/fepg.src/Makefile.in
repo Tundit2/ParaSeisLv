@@ -1,0 +1,4 @@
+FSOURCE = charcommu.f inimpi.f switch.f fepglib.f \
+          intcommu.f realcommu.f timer.f
+CSOURCE = io.c partdmesh.c pmetis.c qsort.c \
+          subtime.c superlumain.c

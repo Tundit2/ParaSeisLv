@@ -1,0 +1,4 @@
+Result "unoda0" "Load Analysis" ### Vector OnNodes          
+ComponentNames "u" "v" "w"                                  
+Mesh "aec8" Dimension 3 Elemtype Hexahedra Nnode 8
+#

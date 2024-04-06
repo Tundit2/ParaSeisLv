@@ -1,0 +1,159 @@
+#!/usr/bin/env csh
+if ( -e dir.inc ) then
+ rm -f dir.inc
+endif
+
+set MpiDir=/opt/intel/compilers_and_libraries_2019.3.199/linux/mpi/intel64/bin/
+set MPICC=mpicc
+set MPIFC=mpif90
+loop1:
+###########   Get Mpi dir and compile command #############
+echo " ";echo " "
+echo -n "Input MPI Compiler Directory[$MpiDir]: " 
+set inkey1=($<)
+if ( ${inkey1} == "") then
+ set inkey1 = ${MpiDir}
+endif
+
+echo -n "Input MPICC compiler[$MPICC]: " 
+set inkey2=($<)
+if ( ${inkey2} == "") then
+ set inkey2 = ${MPICC}
+endif
+
+echo -n "Input MPIFC compiler[$MPIFC]: " 
+set inkey3=($<)
+if ( ${inkey3} == "") then
+ set inkey3 = ${MPIFC}
+endif
+
+while ( ! -e ${inkey1}/${inkey2} ) 
+ echo -n " ${inkey2} can't be found under ${inkey1}/bin ! Please check and input again : "
+ goto loop1
+end
+
+set MpiDir=${inkey1}
+set MPICC=${MpiDir}/${inkey2}
+set MPIFC=${MpiDir}/${inkey3}
+echo "MpiDir = $MpiDir" > dir.inc
+echo "MPICC = ${MPICC}" >> dir.inc
+echo "MPIFC = ${MPIFC}" >> dir.inc
+
+set SrcDir=`pwd`
+############   Get Lib source code dir ##########
+#echo " ";echo " "
+#echo " "
+#echo -n "         Input library source code directory [`pwd`]: " 
+#set inkey=($<)
+#if ("$inkey" == "") then
+# set inkey = $SrcDir
+#endif
+
+#while( ! -e $inkey/fepg.src )
+# echo -n " The Source code directory must be not right! Please check it and input again : "
+# set inkey=($<)
+#end
+
+#set SrcDir=$inkey
+#echo " ============================================"
+#echo "The library Source Directory is $SrcDir"
+#echo " ============================================"
+echo "SrcDir = ${SrcDir}" >> dir.inc
+
+set LibDir=../lib/
+############   Get Lib install dir ###########
+echo " ";echo " "
+echo -n "Input Library Install Directory[$LibDir]: "
+set inkey=($<)
+
+if ( "${inkey}" == "" ) then
+ set inkey=$LibDir
+endif
+
+set flag=0
+if (! -e $inkey ) then
+ echo  -n "Install Directory [${inkey}] not exist ! Create it ?(yes/no): "
+ loop:
+ set inkey1=($<)
+ switch ($inkey1)
+ case "yes":
+  mkdir -p $inkey
+  breaksw
+ case "no":
+  goto error
+  breaksw
+ default :
+  echo -n " Illegal inputi! [yes/no]: "
+  goto loop
+  breaksw
+ endsw
+ if ( flag == 1) then
+ endif
+endif
+
+if( ! -o $inkey ) then
+ echo -n "${inkey} is not own you! Are you sure to install here?(yes/no): "
+ loop1:
+ set inkey1=($<)
+ switch ($inkey1)
+  case "yes":
+   breaksw
+  case "no":
+   goto error
+   breaksw
+  default:
+   echo -n "Illegal input! [yes/no]:"
+   goto loop1
+   breaksw
+ endsw
+endif
+
+set LibDir=$inkey
+echo -n " The Library will be installed in [$LibDir] ,Are you sure ?(yes/no): "
+loop2:
+set inkey=($<)
+switch (${inkey})
+ case "yes":
+  breaksw
+ case "no":
+  goto error
+  breaksw
+ default:
+  echo -n " Illegal input! [yes/no]: "
+  goto loop2
+  breaksw
+endsw
+
+echo "              ======================================="
+echo "                   Library Directory is $LibDir"
+echo "              ======================================="
+echo "LibDir = $LibDir" >> dir.inc
+
+make
+cp ./include ${LibDir} -rf
+
+if ( -e ${LibDir}/include/partdata.h ) then
+  rm -f ${LibDir}/include/partdata.h
+endif
+
+echo "       parameter (fname1='elem0.elm\0')" > ${LibDir}/include/partdata.h
+echo "       parameter (fname2='13\0')" >> ${LibDir}/include/partdata.h
+echo "       parameter (GraphFile='elem.graph')" >> ${LibDir}/include/partdata.h
+echo "       parameter (licensefile='${LibDir}/license.cfg\0')" >> ${LibDir}/include/partdata.h
+
+cp install.org ${LibDir}/install
+chmod +x ${LibDir}/install
+
+goto success
+
+error:
+  echo "           *** The library install unfinished ***"
+  goto end
+
+success:
+  echo "           *********** Install Success ********** "
+if (! -e ${LibDir}/license.cfg ) then
+ echo " Please contact with Fegensoft company for your licence file!"
+endif
+
+end:

@@ -1,0 +1,13 @@
+This file is parameter for meshpre.f
+nx ny nz lat0 lat1 lon0 lon1
+9 9 30 94.02 96.02 28.75 30.75
+ndiv
+8
+4
+2
+3
+4
+5
+8
+2
+1

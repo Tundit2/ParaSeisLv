@@ -1,0 +1,3 @@
+date
+mpirun -np 64 ./ddm
+date

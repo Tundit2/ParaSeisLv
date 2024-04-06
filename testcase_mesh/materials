@@ -1,0 +1,17 @@
+Factors for seismology finite element simulation.
+density: the density of diffenrent layers
+vp     : velocity of p-wave
+vs     : velosity of s-wave
+qc     : damping matrix coefficient
+nalyers: layer number of the crust and mantle
+nalyers
+8
+density    vp        vs        qc      fx      fz        |different layers and absorb layer
+2200.d0    8000.d0   1847.d0   300.00   0.00     0.00   
+2200.d0    6500.d0   1847.d0   300.00   0.00     0.00   
+2200.d0    6300.d0   1847.d0   300.00   0.00     0.00   
+2200.d0    6100.d0   1847.d0   90.00   0.00     0.00   
+2200.d0    6000.d0   1847.d0   69.00   0.00     0.00   
+2200.d0    5000.d0   1847.d0   40.00   0.00     0.00   
+2200.d0    800.d0    200.d0    20.00   0.00     0.00   
+22.d000    3.20000   1.84700   0.09   0.00     0.00   

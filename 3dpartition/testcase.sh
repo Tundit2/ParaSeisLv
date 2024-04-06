@@ -1,0 +1,10 @@
+cp ../testcase_mesh/coor0 .
+cp ../testcase_mesh/elem0 .
+cp ../testcase_mesh/id0 .
+cp ../testcase_mesh/disp0 .
+cp ../testcase_mesh/nodes.dat .
+cp ../testcase_mesh/trigs.dat .
+cp ../MeshPartition/layerinfo .
+cp ../MeshPartition/part .
+cp ../MeshPartition/idnode .
+cp ../MeshPartition/idelem .
